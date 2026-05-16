@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <style>
+        body {
+            width: 380px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            padding: 15px;
+            margin: 0;
+            background-color: #0f141c;
+            color: #adbac7;
+        }
+
+        /* Top Header Navbar Branding Elements */
+        .header-main {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .header-title {
+            font-size: 16px;
+            font-weight: bold;
+            color: #a371f7;
+            margin: 0;
+            cursor: pointer;
+        }
+
+        .header-icons {
+            display: flex;
+            gap: 8px;
+        }
+
+        .icon-btn {
+            background: #22272e;
+            border: 1px solid #373e47;
+            border-radius: 50%;
+            width: 28px;
+            height: 28px;
+            cursor: pointer;
+            color: #adbac7;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 13px;
+        }
+
+        .icon-btn:hover {
+            background: #2d333b;
+        }
+
+        /* Page View Display Layers */
+        .view-section {
+            display: none;
+        }
+
+        .view-section.active {
+            display: block;
+        }
+
+        /* Card Structures */
+        .card {
+            background: #1c2128;
+            border: 1px solid #2d333b;
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 14px;
+            position: relative;
+        }
+
+        .card-title-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .card-title {
+            margin: 0;
+            font-size: 12px;
+            font-weight: bold;
+            color: #adbac7;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .badge {
+            background: #22272e;
+            border: 1px solid #373e47;
+            border-radius: 6px;
+            font-size: 10px;
+            padding: 2px 6px;
+            color: #768390;
+            font-weight: bold;
+        }
+
+        label {
+            font-size: 11px;
+            color: #768390;
+            display: inline-block;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+
+        .coord-label {
+            font-size: 11px;
+            color: #a371f7;
+            font-weight: bold;
+            background: #1f242c;
+            padding: 2px 6px;
+            border-radius: 4px;
+            border: 1px solid #2d333b;
+            margin-left: 6px;
+            display: inline-block;
+        }
+
+        .display-text {
+            font-size: 17px;
+            font-weight: bold;
+            color: white;
+            margin: 8px 0 12px 0;
+            min-height: 24px;
+            word-break: break-all;
+        }
+
+        .btn-row {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        button {
+            flex: 1;
+            padding: 10px;
+            font-weight: bold;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 12px;
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+            transition: background 0.2s, transform 0.1s;
+        }
+
+        button:active {
+            transform: scale(0.98);
+        }
+
+        .nav-btn-prev {
+            background: #2d333b;
+            color: #adbac7;
+            border: 1px solid #373e47;
+        }
+
+        .nav-btn-prev:hover {
+            background: #343b44;
+        }
+
+        .nav-btn-next {
+            background: linear-gradient(135deg, #7928ca, #ff0080);
+            color: white;
+        }
+
+        .nav-btn-next:hover {
+            opacity: 0.9;
+        }
+
+        .green-add-btn {
+            background: #10b981;
+            color: #0f141c;
+            width: 100%;
+            font-size: 13px;
+            font-weight: 800;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            border: none;
+            cursor: pointer;
+        }
+
+        .green-add-btn:hover {
+            background: #059669;
+        }
+
+        .footer-action-btn {
+            background: #22272e;
+            color: white;
+            border: 1px solid #373e47;
+            padding: 12px;
+            flex: 4;
+        }
+
+        .footer-action-btn:hover {
+            background: #2d333b;
+        }
+
+        .refresh-btn {
+            background: #22272e;
+            color: #adbac7;
+            border: 1px solid #373e47;
+            flex: 1;
+            padding: 12px;
+        }
+
+        .refresh-btn:hover {
+            background: #2d333b;
+            color: #58a6ff;
+        }
+
+        /* Config Input Forms Matrix */
+        input {
+            width: 100%;
+            padding: 9px;
+            margin-top: 5px;
+            background: #22272e;
+            border: 1px solid #373e47;
+            border-radius: 8px;
+            color: white;
+            box-sizing: border-box;
+            font-size: 12px;
+        }
+
+        input:focus {
+            border-color: #58a6ff;
+            outline: none;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 2px 6px;
+            font-size: 10px;
+            font-weight: bold;
+            border-radius: 4px;
+        }
+
+        .logged-out {
+            background: #3c1e22;
+            color: #f85149;
+        }
+
+        .logged-in {
+            background: #1b3c22;
+            color: #56d364;
+        }
+
+        .config-grid {
+            display: flex;
+            gap: 8px;
+            margin-top: 4px;
+        }
+
+        .config-box {
+            flex: 1;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="header-main">
+        <div class="header-title" id="ext-title-nav">Google Sheet Viewer Pro</div>
+        <div class="header-icons">
+            <div class="icon-btn" id="btn-toggle-theme">🌗</div>
+            <div class="icon-btn" id="btn-goto-settings">⚙️</div>
+        </div>
+    </div>
+
+    <div id="page-main" class="view-section active">
+
+        <div class="card">
+            <div class="card-title-row">
+                <h3 class="card-title">👤 Block 1 — Name Viewer</h3>
+                <span class="badge" id="b1-coord-badge">C-9</span>
+            </div>
+            <div class="display-text" id="b1-text-val">Loading...</div>
+            <div class="btn-row">
+                <button id="btn-b1-prev" class="nav-btn-prev">◀ Previous Row</button>
+                <button id="btn-b1-next" class="nav-btn-next">Next Row ▶</button>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-title-row">
+                <h3 class="card-title">🔗 Block 2 — Link Viewer</h3>
+                <span class="badge" id="b2-coord-badge">E-9</span>
+            </div>
+            <div class="display-text" id="b2-text-val" style="color: #58a6ff;">Loading...</div>
+
+            <button id="btn-b2-open" class="green-add-btn"
+                style="background: #a371f7; color: white; display: none; margin-bottom:0;">🌐 Open HackerRank
+                Link</button>
+
+            <div class="btn-row" id="b2-nav-container">
+                <button id="btn-b2-prev" class="nav-btn-prev">◀ Prev Col</button>
+                <button id="btn-b2-next" class="nav-btn-next">Next Col ▶</button>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-title-row">
+                <h3 class="card-title">➕ Block 3 — Counter Matrix</h3>
+                <span class="badge" id="b3-coord-badge">F-10</span>
+            </div>
+            <label>Current Coordinate Value:</label>
+            <div class="display-text" id="b3-text-val" style="color: #10b981; font-size: 22px;">0</div>
+
+            <button id="btn-counter-add" class="green-add-btn">Add +1</button>
+
+            <div class="btn-row">
+                <button id="btn-b3-prev" class="nav-btn-prev">◀ Previous Row</button>
+                <button id="btn-b3-next" class="nav-btn-next">Next Row ▶</button>
+            </div>
+        </div>
+
+        <div style="display: flex; gap: 10px; margin-top: 5px;">
+            <button id="btn-open-live-url" class="footer-action-btn">Open Sheet</button>
+            <button id="btn-force-sync" class="refresh-btn">🔄</button>
+        </div>
+    </div>
+
+    <div id="page-settings" class="view-section">
+        <div class="card">
+            <h3>🔐 Authentication Profile</h3>
+            <div
+                style="display: flex; justify-content: space-between; align-items: center; margin-top: 8px; margin-bottom: 10px;">
+                <span id="auth-status" class="status-badge logged-out">● Not Logged In</span>
+                <div id="profile-area" style="font-size: 11px; font-weight: bold; color: #58a6ff;"></div>
+            </div>
+            <div class="btn-row">
+                <button id="btn-login" style="background: #6f42c1; color: white;">Link Google ID</button>
+                <button id="btn-logout" style="background: #da3637; color: white;">Disconnect</button>
+            </div>
+        </div>
+
+        <div class="card">
+            <h3>📊 Workspace Layout Blueprint</h3>
+
+            <label>Google Spreadsheet Link Path Target</label>
+            <input type="text" id="cfg-sheet-link" placeholder="https://docs.google.com/spreadsheets/d/.../edit">
+
+            <label style="color:#58a6ff;">👤 Block 1 (Name Viewer) Coordinates</label>
+            <div class="config-grid">
+                <div class="config-box"><label>Fixed Column</label><input type="text" id="cfg-b1-col" value="C"></div>
+                <div class="config-box"><label>Starting Row</label><input type="number" id="cfg-b1-row" value="9"></div>
+            </div>
+
+            <label style="color:#a371f7; margin-top:10px;">🔗 Block 2 (Link Viewer) Coordinates</label>
+            <div class="config-grid">
+                <div class="config-box"><label>Starting Column</label><input type="text" id="cfg-b2-col" value="E">
+                </div>
+                <div class="config-box"><label>Fixed Row</label><input type="number" id="cfg-b2-row" value="8"></div>
+            </div>
+
+            <label style="color:#10b981; margin-top:10px;">➕ Block 3 (Counter Engine) Coordinates</label>
+            <div class="config-grid">
+                <div class="config-box"><label>Starting Column</label><input type="text" id="cfg-b3-col" value="F">
+                </div>
+                <div class="config-box"><label>Starting Row</label><input type="number" id="cfg-b3-row" value="10">
+                </div>
+            </div>
+
+            <button id="btn-validate" class="green-add-btn"
+                style="margin-top: 18px; background: #a371f7; color: white;">Save Config & Fetch Live Sync</button>
+        </div>
+    </div>
+
+    <script src="popup.js"></script>
+</body>
+
+</html>
