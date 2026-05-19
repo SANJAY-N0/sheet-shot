@@ -2,6 +2,8 @@
 
 A Chrome / Brave extension that lets you read, navigate, and write values to any Google Spreadsheet directly from your browser toolbar — authenticated via Google OAuth.
 
+## A Chrome extension to view, navigate, and update Google Sheets cells directly from your browser toolbar ##
+
 ---
 
 ## 📸 Extension Preview
@@ -15,12 +17,14 @@ A Chrome / Brave extension that lets you read, navigate, and write values to any
 </p>
 
 <p align="center">
-  <em>Left: Main view with Name Viewer, Value Viewer & Cell Editor &nbsp;|&nbsp; Right: Settings / OAuth configuration</em>
+  <em>Left: Main view with Name Viewer, Value Viewer &amp; Cell Editor &nbsp;|&nbsp; Right: Settings / OAuth configuration</em>
 </p>
 
 ---
 
 ## 📁 Project Files
+
+Every file in this folder has a specific role. `manifest.json` is the identity of the extension — it tells Chrome what permissions to request and which files to load. `popup.js` is the brain — it handles all OAuth login, Google Sheets API calls, and CRUD operations. The icon files are the visual identity shown in the toolbar and the Extensions management page.
 
 ```
 simple-login-0.3/
@@ -37,6 +41,8 @@ simple-login-0.3/
 
 ## ⚙️ Step 1 — Create a Google Cloud Project
 
+Before the extension can communicate with Google services, you need a **Google Cloud Project**. Think of it as a container that holds all the settings, API access, and credentials for your app. Every Google API you use (like Sheets) must be linked to a project. This is free to create and takes less than a minute.
+
 1. Go to → **https://console.cloud.google.com/**
 2. Click **"Select a project"** → **"New Project"**
 3. Give it any name (e.g. `sheet-viewer-pro`) → click **Create**
@@ -44,6 +50,8 @@ simple-login-0.3/
 ---
 
 ## 🔑 Step 2 — Enable the Google Sheets API
+
+By default, a new Cloud Project cannot access any Google service. You must explicitly **turn on** each API you need. In this case, we need the Google Sheets API so the extension can read cell values, write updated counts, and sync data from your spreadsheet in real time.
 
 1. In your project, go to **APIs & Services → Library**
 2. Search for **"Google Sheets API"**
@@ -54,6 +62,8 @@ simple-login-0.3/
 ## 🆔 Step 3 — Create an OAuth 2.0 Client ID
 
 > This is the most important step. The Client ID is what allows the extension to log in with Google.
+
+The **OAuth Client ID** is a unique key that identifies your extension to Google's login system. When a user clicks "Link Google Account", Chrome sends this ID to Google so Google knows which app is requesting permission. Without it, the sign-in popup will fail immediately. The **OAuth consent screen** is the page users see when they are asked to grant access — you must configure it with the correct permission scopes so the extension can both read and write spreadsheet data.
 
 1. Go to **APIs & Services → Credentials**
 2. Click **"+ Create Credentials"** → choose **"OAuth client ID"**
@@ -78,6 +88,8 @@ simple-login-0.3/
 
 ## 🛠️ Step 4 — Add Your Client ID to the Extension
 
+The extension needs to know which OAuth Client ID to use when it builds the Google sign-in URL. This value is stored as a constant at the very top of `popup.js`. You simply **replace the existing placeholder** with the Client ID you copied from Google Cloud Console. This is a one-time change — after this, the extension always uses your credentials.
+
 Open `popup.js` and find **line 2–3** at the very top:
 
 ```js
@@ -98,6 +110,8 @@ Save the file.
 
 ## 🔌 Step 5 — Load the Extension in Chrome / Brave
 
+Chrome extensions loaded from a local folder (instead of the Web Store) are called **unpacked extensions**. You load them using Developer Mode. Once loaded, Chrome assigns your extension a unique **Extension ID** — a 32-character string that Google uses to verify the origin of OAuth requests. You need this ID to complete Step 3 on Google Cloud Console.
+
 1. Open Chrome → go to `chrome://extensions`
 2. Enable **Developer Mode** (top-right toggle)
 3. Click **"Load unpacked"**
@@ -111,6 +125,8 @@ Save the file.
 
 ## 🔄 Step 6 — Reload & Test
 
+Any time you edit source files (`popup.js`, `popup.html`, `manifest.json`), Chrome does **not** pick up the changes automatically — you must manually reload the extension. After reloading, click the toolbar icon to open the popup and confirm it displays the UI correctly before logging in.
+
 1. Back on `chrome://extensions`, click the **🔄 reload** button on the extension
 2. Click the extension icon in the toolbar — the popup opens
 3. Click the **⚙️ settings** icon (top right of popup)
@@ -118,6 +134,8 @@ Save the file.
 ---
 
 ## 📋 Step 7 — Configure Your Spreadsheet
+
+This is where you connect the extension to your actual Google Sheet. The extension needs the **full URL** of the sheet, the **tab name** (the sheet name shown at the bottom of Google Sheets), and the column letters that correspond to your data layout. Once saved, the extension uses these settings every time it fetches or writes data.
 
 Inside the Settings page:
 
@@ -133,6 +151,8 @@ Then click **"Validate & Fetch Sync"** — this triggers the Google OAuth login 
 ---
 
 ## ✅ How OAuth Login Works (Behind the Scenes)
+
+Understanding how the login flow works helps you debug issues faster. The extension uses Chrome's built-in `chrome.identity` API instead of a backend server, so no passwords are ever stored. Chrome handles the secure redirect, extracts the token from the URL, and the extension saves it locally. Every API call to Google Sheets then sends this token as a header to prove the user is authenticated.
 
 When you click **"Validate & Fetch Sync"** or **"Link Google Account"**:
 
@@ -154,15 +174,19 @@ The `spreadsheets` scope is required to **read and write** cell values.
 
 ## 🧩 Extension Blocks Explained
 
+The popup UI is divided into three independent blocks, each targeting a specific part of your spreadsheet. Block 1 and Block 2 can navigate independently, and Block 3 always shows the cell at the **intersection** of Block 1's current row and Block 2's current column — making it easy to update a specific data point without manually searching for the cell.
+
 | Block | What it does |
 |-------|-------------|
-| **Block 1 — Name Viewer** | Reads column C (configurable), navigates by row |
-| **Block 2 — Value Viewer** | Reads row 8 (fixed), navigates by column |
-| **Block 3 — Cell Editor** | Reads/writes the intersection of Block 1's row × Block 2's column |
+| **Block 1 — Name Viewer** | Reads column C (configurable), navigates by row — shows the topic/name at the current row |
+| **Block 2 — Value Viewer** | Reads row 8 (fixed), navigates by column — shows the category label or link for the current column |
+| **Block 3 — Cell Editor** | Reads/writes the intersection of Block 1's row × Block 2's column — use +1 to increment a counter or SAVE to write a custom value |
 
 ---
 
 ## 🗝️ Storage Keys (chrome.storage.local)
+
+The extension stores all its configuration and session data in Chrome's local storage — this means settings persist across browser restarts without needing a server. The OAuth token is also saved here so the user does not have to log in every time the popup is opened (until the token expires).
 
 | Key | Value stored |
 |-----|-------------|
@@ -176,6 +200,8 @@ The `spreadsheets` scope is required to **read and write** cell values.
 ---
 
 ## 🚨 Common Issues
+
+Even when everything is set up correctly, small mismatches between the Extension ID and OAuth credentials can cause silent failures. Use these targeted fixes to resolve the most frequent problems quickly.
 
 ### ❌ "OAuth Client ID not found" or blank popup
 - Make sure you replaced `OAUTH_CLIENT_ID` in `popup.js` with your real Client ID
@@ -196,6 +222,8 @@ The `spreadsheets` scope is required to **read and write** cell values.
 
 ## 🧪 Quick Checklist Before First Use
 
+Run through this list before testing. Every item must be checked — a single missing step will cause the login or data fetch to fail silently.
+
 - [ ] Google Cloud Project created
 - [ ] Google Sheets API enabled
 - [ ] OAuth consent screen configured with correct scopes
@@ -210,4 +238,4 @@ The `spreadsheets` scope is required to **read and write** cell values.
 
 ## 📬 Support
 
-If authentication fails, open Chrome DevTools on the popup (`right-click popup → Inspect`) and check the **Console** tab for error messages.
+If authentication fails, open Chrome DevTools on the popup (`right-click popup → Inspect`) and check the **Console** tab for error messages. Most errors will clearly state whether the issue is a missing Client ID, an invalid token, or a scope/permissions problem on the Google Cloud side.
