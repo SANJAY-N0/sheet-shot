@@ -1,0 +1,16 @@
+{
+    "manifest_version": 3,
+    "name": "Brave Compatible Google OAuth",
+    "version": "1.0",
+    "description": "Log in with Google seamlessly across Brave and Chrome.",
+    "permissions": [
+        "identity",
+        "storage"
+    ],
+    "background": {
+        "service_worker": "background.js"
+    },
+    "action": {
+        "default_popup": "popup.html"
+    }
+}
