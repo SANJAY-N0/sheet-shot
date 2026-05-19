@@ -4,6 +4,22 @@ A Chrome / Brave extension that lets you read, navigate, and write values to any
 
 ---
 
+## 📸 Extension Preview
+
+> What the popup looks like when loaded in Chrome / Brave.
+
+<p align="center">
+  <img src="img-1.png" alt="Extension Popup — Main View" width="380" />
+  &nbsp;&nbsp;
+  <img src="img-2.png" alt="Extension Popup — Settings View" width="380" />
+</p>
+
+<p align="center">
+  <em>Left: Main view with Name Viewer, Value Viewer & Cell Editor &nbsp;|&nbsp; Right: Settings / OAuth configuration</em>
+</p>
+
+---
+
 ## 📁 Project Files
 
 ```
