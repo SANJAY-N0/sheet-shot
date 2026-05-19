@@ -1,4 +1,4 @@
-# 📊 Google Sheet Viewer Pro — Chrome Extension
+#  Google Sheet Viewer Pro — Chrome Extension
 
 A Chrome / Brave extension that lets you read, navigate, and write values to any Google Spreadsheet directly from your browser toolbar — authenticated via Google OAuth.
 
@@ -95,7 +95,7 @@ Open `popup.js` and find **line 2–3** at the very top:
 ```js
 // ─── Constants ───────────────────────────────────────────
 const OAUTH_CLIENT_ID =
-  "612679483614-7i9h2j9rpob401rk0l81dogu7kgvsdml.apps.googleusercontent.com";
+  "612679483614-xxxxxxxxxxxxxxxx.apps.googleusercontent.com";
 ```
 
 **Replace the string** with your own Client ID:
